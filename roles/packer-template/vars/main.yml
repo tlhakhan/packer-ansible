@@ -1,0 +1,49 @@
+---
+packer_vmware_vm: {
+  "builders": [{
+          "type": "vmware-iso",
+          "boot_command": [
+              "<tab>",
+              " inst.text noipv6 net.ifnames=0 biosdevname=0 inst.ks=http://{{ autoinstall.server }}/auto-install/{{ autoinstall.template }}/{{ virtual_machine.hostname }}<enter><wait>"
+          ],
+          "iso_url": "http://{{ autoinstall.server }}/iso/{{ autoinstall.iso_filename }}",
+          "iso_checksum": "{{ autoinstall.iso_checksum }}",
+          "iso_checksum_type": "{{ autoinstall.iso_checksum_type}}",
+          "vm_name": "{{ virtual_machine.hostname}}",
+          "ssh_username": "root",
+          "ssh_private_key_file": "{{ playbook_dir }}/ssh/packer.private",
+          "ssh_timeout": "25m",
+          "shutdown_command": "shutdown -P now",
+          "guest_os_type": "{{ virtual_machine.guest_os_type }}",
+          "remote_type": "esx5",
+          "remote_host": "{{ virtual_machine.esx.server}}",
+          "remote_port": "22",
+          "remote_datastore": "{{ virtual_machine.esx.datastore }}",
+          "remote_cache_datastore": "{{ virtual_machine.esx.datastore }}",
+          "remote_cache_directory": "packer_cache",
+          "remote_username": "root",
+          "remote_private_key_file": "{{ playbook_dir }}/ssh/packer.private",
+          "disable_vnc": false,
+          "cpus": "{{ virtual_machine.cpus }}",
+          "memory": "{{ virtual_machine.memory }}",
+          "network_adapter_type": "vmxnet3",
+          "vmx_data": {
+              "RemoteDisplay.vnc.enabled": "true",
+              "RemoteDisplay.vnc.port": "5900",
+              "ethernet0.networkName": "{{ virtual_machine.esx.network }}",
+              "numa.autosize.once" : "false",
+              "numa.autosize" : "true",
+              "mem.hotadd" : "true",
+              "vcpu.hotadd" : "true",
+              "vmxnet3.rev.30": "false"
+          },
+          "vnc_bind_address": "0.0.0.0",
+          "vnc_disable_password": true,
+          "disk_size": "{{ virtual_machine.disk_size }}",
+          "keep_registered":true,
+          "skip_export": true,
+          "disk_type_id": "thin",
+          "format": "vmx"
+      }
+  ]
+}

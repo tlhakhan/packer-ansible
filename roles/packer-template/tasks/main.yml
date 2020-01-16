@@ -1,0 +1,31 @@
+---
+- name: ensure that the {{ virtual_machine.hostname }} is not alive
+  command: ping -c 1 -w 1 {{ virtual_machine.hostname }}
+  failed_when: false
+  register: host_liveliness
+
+- name: end play early, {{ virtual_machine.hostname }} is alive
+  debug:
+    msg: '{{ virtual_machine.hostname }} is alive.'
+  when: host_liveliness.rc == 0
+  
+- meta: end_play
+  when: host_liveliness.rc == 0
+
+- name: create a playbook tmp folder
+  file:
+    path: '{{ playbook_dir }}/tmp'
+    state: directory
+
+- name: generate packer template for {{ virtual_machine.hostname }}
+  copy:
+    content: '{{ packer_vmware_vm | to_json }}'
+    dest: '{{ playbook_dir }}/tmp/packer.{{ virtual_machine.hostname }}.json'
+
+- name: build vm {{ virtual_machine.hostname }}
+  shell: 'packer build {{ playbook_dir }}/tmp/packer.{{ virtual_machine.hostname }}.json'
+  register: packer_build_output
+
+- name: packer output
+  debug:
+    var: packer_build_output.stdout

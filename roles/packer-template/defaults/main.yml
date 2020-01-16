@@ -1,0 +1,18 @@
+---
+virtual_machine:
+  hostname: vm-00
+  cpus: 1
+  memory: 1024
+  disk_size : 16384 
+  guest_os_type: centos-64
+  esx:
+    server: vsphere-20
+    network: 'VM Network'
+    datastore: datastore1
+
+autoinstall:
+  server: 10.0.0.1
+  template: centos-7
+  iso_filename: CentOS-7-x86_64-Minimal-1908.iso
+  iso_checksum: 7002b56184180591a8fa08c2fe0c7338
+  iso_checksum_type: md5
