@@ -1,18 +1,20 @@
 ---
+# the virtual machine config to generate packer build json file
 virtual_machine:
-  hostname: vm-00
+  hostname: vm-00 # hostname of the vm
   cpus: 1
   memory: 1024
   disk_size : 16384 
-  guest_os_type: centos-64
+  guest_os_type: centos-64 # this should be changed debian6-64, if debian os -- its primarily used by vmware 
   esx:
-    server: vsphere-20
-    network: 'VM Network'
-    datastore: datastore1
+    server: vsphere-20 # esx host where the vm will be created
+    network: 'VM Network'  # the name of the esx network that the VM will use for its vnic
+    datastore: datastore1 # the esx datastore name where the VM folder will be created on
 
+# autoinstall server details
 autoinstall:
-  server: 10.0.0.1
-  template: centos-7
-  iso_filename: CentOS-7-x86_64-Minimal-1908.iso
-  iso_checksum: 7002b56184180591a8fa08c2fe0c7338
-  iso_checksum_type: md5
+  server: 10.0.0.1 # the ip address where the autoinstall server is running, place port number if its running on port other than 80, example 10.0.0.1:8081
+  template: centos-7 # this is template type that autoinstall supports
+  iso_filename: CentOS-7-x86_64-Minimal-1908.iso # the iso file that that packer will use
+  iso_checksum: 7002b56184180591a8fa08c2fe0c7338  # the md5sum of the iso file
+  iso_checksum_type: md5 # tell packer that the checksum is md5sum, you can choose other types of checksum if needed
