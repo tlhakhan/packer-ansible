@@ -1,0 +1,18 @@
+---
+virtual_machine:
+  hostname: devbox-21
+  cpus: 1
+  memory: 2048
+  disk_size: 16384
+  guest_os_type: centos-64
+  esx:
+    server: vs-20
+    datastore: nvme1
+    network: 'VM Network'
+
+autoinstall:
+  server: 192.168.200.130:8081
+  template: centos-7
+  iso_filename: CentOS-7-x86_64-Minimal-1908.iso
+  iso_checksum: 7002b56184180591a8fa08c2fe0c7338
+  iso_checksum_type: md5
